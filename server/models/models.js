@@ -1,38 +1,38 @@
 const sequelize = require('../db')
 const {DataTypes} = require('sequelize')
 
-const seller = sequelize.define('seller', {
+const Seller = sequelize.define('seller', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, unique: true, allowNull: false}
 })
 
-const product_type = sequelize.define('product_type', {
+const Product_type = sequelize.define('product_type', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, unique: true, allowNull: false}
 })
 
-const product = sequelize.define('product', {
+const Product = sequelize.define('product', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, unique: true, allowNull: false},
     description: {type: DataTypes.STRING}
 })
 
-const cheque = sequelize.define('cheque', {
+const Cheque = sequelize.define('cheque', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     num: {type: DataTypes.STRING, unique: true, allowNull: false}
 })
 
-seller.hasMany(cheque)
-cheque.belongsTo(seller)
+Seller.hasMany(Cheque)
+Cheque.belongsTo(Seller)
 
-product.hasMany(cheque)
-cheque.belongsTo(product)
+Product.hasMany(Cheque)
+Cheque.belongsTo(Product)
 
-product.belongsTo(product_type)
+Product.belongsTo(Product_type)
 
 module.exports = {
-    seller,
-    cheque,
-    product,
-    product_type
+    Seller,
+    Cheque,
+    Product,
+    Product_type
 }

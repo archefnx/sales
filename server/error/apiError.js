@@ -17,3 +17,5 @@ class apiError extends Error{
         return new apiError(403, message)
     }
 }
+
+module.exports = apiError
