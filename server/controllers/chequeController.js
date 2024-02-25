@@ -1,12 +1,12 @@
-const {Cheque} = require('../models/models')
-const {apiError} = require('../error/apiError')
-
+const apiError = require('../error/apiError');
+const { Cheque, Product, Seller } = require('../models/models')
+ 
 class ChequetController {
     async create(req, res) {
         const { num, productId, sellerId } = req.body;
-
+        return res.status(404)
         if (!num || !productId || !sellerId) {
-            apiError.badRequest('Не заданы параметры.')
+            return apiError.badRequest('Не заданы параметры.'); 
         }
 
         const cheque = await Cheque.create({ num, productId, sellerId });
@@ -14,9 +14,20 @@ class ChequetController {
     }
 
     async getAll(req, res) {
-        const cheques = await Cheque.findAll()
-        res.status(200).json(cheques)
+        try {
+            const cheques = await Cheque.findAll({
+                attributes: ['num'],
+                include: [
+                    { model: Product, attributes: ['name'], as: 'product' },
+                    { model: Seller, attributes: ['name'], as: 'seller' }
+                ]
+            });
+            res.status(200).json(cheques);
+        } catch (error) {
+            console.error("Ошибка при выполнении запроса:", error);
+            res.status(500).json({ error: "Произошла ошибка при обработке запроса" });
+        }
     }
 }
 
-module.exports = new ChequetController()
+module.exports = new ChequetController();
